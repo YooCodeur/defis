@@ -1,0 +1,579 @@
+.container {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-weight: 500;
+    color: #333;
+}
+
+.input, .textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.fileInput {
+    padding: 10px;
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.submitButton, .createButton {
+    padding: 12px 24px;
+    background: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cancelButton {
+    padding: 12px 24px;
+    background: #f5f5f5;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submitButton:hover, .createButton:hover {
+    background: #0051cc;
+}
+
+.cancelButton:hover {
+    background: #e5e5e5;
+}
+
+.submitButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #e00;
+    padding: 10px;
+    background: #fee;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.info {
+    color: #666;
+    text-align: center;
+    padding: 20px;
+}
+
+.currentChallengeInfo {
+    text-align: left;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.challengeTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0070f3;
+    margin-bottom: 10px;
+}
+
+.challengeDescription {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.assignedTo {
+    color: #333;
+    background: #e8f0fe;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.assignedTo strong {
+    color: #0070f3;
+    margin-right: 5px;
+}
+
+.challengeActions {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.acceptButton, .rejectButton {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+.acceptButton {
+    background: #4CAF50;
+    color: white;
+}
+
+.acceptButton:hover {
+    background: #388E3C;
+    transform: translateY(-2px);
+}
+
+.rejectButton {
+    background: #f44336;
+    color: white;
+}
+
+.rejectButton:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+.challengeStatus {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status {
+    color: #333;
+    padding: 8px 12px;
+    background: #e3f2fd;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.status strong {
+    color: #1976d2;
+    margin-right: 5px;
+}
+
+.challengeModal {
+    text-align: center;
+}
+
+.challengeModal h2 {
+    color: #0070f3;
+    margin-bottom: 20px;
+}
+
+.challengeDetails {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.modalActions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.videoUploadSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.videoUploadSection h3 {
+    color: #0070f3;
+    margin-bottom: 15px;
+}
+
+.videoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fileInput {
+    border: 2px dashed #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.fileInput:hover {
+    border-color: #0070f3;
+}
+
+.fileHint {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #0070f3;
+    transition: width 0.3s ease;
+}
+
+.challengeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.challengeHeader h2 {
+    color: #0070f3;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.statusBadge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.challengeContent {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.description {
+    color: #666;
+    line-height: 1.6;
+    margin: 15px 0;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #0070f3;
+}
+
+.videoUploadSection {
+    margin-top: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.videoUploadSection h4 {
+    color: #0070f3;
+    margin: 0 0 15px 0;
+}
+
+.votingSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.videoPreview {
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.submittedVideo {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto;
+}
+
+.votingActions {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+}
+
+.voteButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin: 15px auto;
+}
+
+.approveButton, .rejectButton {
+    width: 100%;
+    min-width: 120px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.approveButton {
+    background: #4CAF50;
+    color: white;
+}
+
+.approveButton:hover {
+    background: #388E3C;
+    transform: translateY(-2px);
+}
+
+.rejectButton {
+    background: #f44336;
+    color: white;
+}
+
+.rejectButton:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .voteButtons {
+        grid-template-columns: 1fr;
+        max-width: 200px;
+    }
+
+    .approveButton, .rejectButton {
+        padding: 15px 20px;
+    }
+}
+
+.votingProgress {
+    margin-top: 20px;
+}
+
+.voteBar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.approveVotes {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.validationSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.videoContainer {
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+}
+
+.challengeVideo {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: block;
+}
+
+.votingStats {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.progressBar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.votedMessage {
+    text-align: center;
+    color: #666;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+
+.historySection {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.historySection h3 {
+    color: #0070f3;
+    margin-bottom: 20px;
+}
+
+.challengesList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.historyItem {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #0070f3;
+}
+
+.historyItem h4 {
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.historyDescription {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.historyMeta {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.historyMeta span {
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.historyVideo {
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+}
+
+.completedVideo {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Style commun pour tous les conteneurs de vidéo */
+.videoContainer, .historyVideo, .videoPreview {
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    max-width: 400px; /* Réduit la largeur maximale */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Style commun pour toutes les vidéos */
+.challengeVideo, .completedVideo, .submittedVideo {
+    width: 100%;
+    max-width: 400px; /* Réduit la largeur maximale */
+    height: auto;
+    aspect-ratio: 16/9; /* Maintient un ratio d'aspect vidéo standard */
+    display: block;
+    margin: 0 auto;
+    object-fit: contain; /* Assure que la vidéo garde ses proportions */
+}
+
+/* Style pour le conteneur de la section vidéo */
+.videoUploadSection, .validationSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-width: 450px; /* Un peu plus large que la vidéo */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ajustement pour les vidéos dans l'historique */
+.historyItem {
+    /* ... autres styles ... */
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+} 

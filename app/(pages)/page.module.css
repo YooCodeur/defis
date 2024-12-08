@@ -1,0 +1,76 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 20px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eee;
+}
+
+.nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.nav a:hover {
+    background: #007bff;
+    color: white;
+}
+
+.title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px;
+}
+
+.challengeList {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.challengeItem {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.challengeItem:hover {
+    transform: translateY(-5px);
+}
+
+.videoSection {
+    margin-top: 40px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.videoSection h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.video {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: block;
+    border-radius: 5px;
+} 

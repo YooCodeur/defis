@@ -1,0 +1,4 @@
+<invoke name="run_terminal_command">
+<parameter name="command">mkdir -p app/register</parameter>
+<parameter name="explanation">Création du dossier register pour la page d'inscription</parameter>
+</invoke> 

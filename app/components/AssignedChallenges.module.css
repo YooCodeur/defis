@@ -1,0 +1,64 @@
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.container h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.challengesList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.challengeCard {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: transform 0.2s;
+}
+
+.challengeCard:hover {
+    transform: translateY(-2px);
+}
+
+.challengeCard h3 {
+    color: #0070f3;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.challengeCard p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.submitButton {
+    background: #0070f3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.submitButton:hover {
+    background: #0051cc;
+}
+
+.submitButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+} 
