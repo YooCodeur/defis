@@ -75,19 +75,28 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                 const response = await fetch('/api/challenges/current');
                 const data = await response.json();
                 if (data.success && data.challenge) {
-                    // Ne mettre à jour que si le défi est différent
-                    if (!currentChallenge || currentChallenge._id !== data.challenge._id) {
-                        console.log('Nouveau défi détecté:', data.challenge);
+                    console.log('Polling - Défi actuel:', {
+                        id: data.challenge._id,
+                        status: data.challenge.status,
+                        assignedTo: data.challenge.assignedTo,
+                        currentUserId: userId
+                    });
+                    
+                    // Mettre à jour si le défi est différent ou si le statut a changé
+                    if (!currentChallenge || 
+                        currentChallenge._id !== data.challenge._id || 
+                        currentChallenge.status !== data.challenge.status) {
+                        console.log('Mise à jour du défi détectée');
                         setCurrentChallenge(data.challenge);
                     }
                 }
             } catch (error) {
                 console.error('Erreur lors du polling:', error);
             }
-        }, 5000); // Vérifier toutes les 5 secondes
+        }, 2000); // Vérifier toutes les 2 secondes
 
         return () => clearInterval(pollInterval);
-    }, [currentChallenge]);
+    }, [currentChallenge, userId]);
 
     const fetchCurrentChallenge = async () => {
         try {
