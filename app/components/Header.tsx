@@ -12,12 +12,8 @@ const Header = () => {
     };
 
     useEffect(() => {
-        // Vérification initiale
         checkLoginStatus();
-
-        // Vérifier toutes les 100ms
         const interval = setInterval(checkLoginStatus, 100);
-
         return () => clearInterval(interval);
     }, []);
 
@@ -44,10 +40,16 @@ const Header = () => {
                                 </Link>
                             </>
                         ) : (
-                            <Link href="/login" className={styles.headerButton}>
-                                <span className={styles.buttonEmoji}>🔑</span>
-                                <span className={styles.buttonText}>Connexion</span>
-                            </Link>
+                            <>
+                                <Link href="/login" className={styles.headerButton}>
+                                    <span className={styles.buttonEmoji}>🔑</span>
+                                    <span className={styles.buttonText}>Connexion</span>
+                                </Link>
+                                <Link href="/register" className={styles.headerButton}>
+                                    <span className={styles.buttonEmoji}>📝</span>
+                                    <span className={styles.buttonText}>S'inscrire</span>
+                                </Link>
+                            </>
                         )}
                     </div>
                 </div>
