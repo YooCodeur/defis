@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
-type MongooseCache = {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-};
+interface MongooseCache {
+    conn: mongoose.Connection | null;
+    promise: Promise<mongoose.Connection> | null;
+}
 
 declare global {
-    let mongoose: MongooseCache;
+    var mongoose: MongooseCache;
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -15,10 +15,10 @@ if (!MONGODB_URI) {
     throw new Error('Veuillez définir l\'URI MongoDB dans les variables d\'environnement');
 }
 
-const cached = global.mongoose || { conn: null, promise: null };
+const cached: MongooseCache = global.mongoose || { conn: null, promise: null };
 global.mongoose = cached;
 
-export async function connectDB() {
+export async function connectDB(): Promise<mongoose.Connection> {
     if (cached.conn) {
         return cached.conn;
     }
@@ -35,10 +35,10 @@ export async function connectDB() {
         };
 
         try {
-            cached.promise = mongoose.connect(MONGODB_URI!, opts);
-            const instance = await cached.promise;
-            cached.conn = instance;
-            return instance;
+            cached.promise = mongoose.connect(MONGODB_URI!, opts).then(mongoose => mongoose.connection);
+            const conn = await cached.promise;
+            cached.conn = conn;
+            return conn;
         } catch (error) {
             cached.promise = null;
             cached.conn = null;
@@ -47,9 +47,9 @@ export async function connectDB() {
     }
 
     try {
-        const instance = await cached.promise;
-        cached.conn = instance;
-        return instance;
+        const conn = await cached.promise;
+        cached.conn = conn;
+        return conn;
     } catch (e) {
         cached.promise = null;
         throw e;

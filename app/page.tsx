@@ -2,33 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import ChallengeSection from './components/ChallengeSection';
 import styles from './page.module.css';
+import { Challenge } from './types/challenge';
 
-interface Challenge {
-    _id: string;
-    title: string;
-    description: string;
-    status: string;
-    assignedTo: {
-        _id: string;
-        username: string;
-    };
-    submission?: {
-        video: {
-            url: string;
-            publicId: string;
-        };
-        submittedAt: Date;
-        submittedBy: string;
-    };
-    votes: Array<{
-        user: string;
-        vote: 'approve' | 'reject';
-        votedAt: Date;
-    }>;
-    requiredVotes: number;
-}
-
-export default function Home() {
+export default function HomePage() {
     const [userId, setUserId] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
     const [currentChallenge, setCurrentChallenge] = useState<Challenge | null>(null);
