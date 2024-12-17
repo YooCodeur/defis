@@ -4,6 +4,7 @@ import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from './ChallengeSection.module.css';
 import Image from 'next/image';
 import type { Challenge } from '@/app/types/challenge';
+import ReactConfetti from 'react-confetti';
 
 interface User {
     _id: string;
@@ -54,6 +55,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
     const [mediaType, setMediaType] = useState<'video' | 'photo'>('video');
     const [currentChallenge, setCurrentChallenge] = useState<Challenge | null>(challenge);
     const [commentText, setCommentText] = useState<string>('');
+    const [showConfetti, setShowConfetti] = useState(false);
 
     useEffect(() => {
         setCurrentChallenge(challenge);
@@ -246,12 +248,50 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
             const data = await response.json();
             if (data.success) {
                 await fetchCurrentChallenge();
-            } else if (data.nextCreator) {
-                setCurrentChallenge({
-                    ...currentChallenge,
-                    status: 'completed',
-                    assignedTo: data.nextCreator
-                });
+                
+                const updatedChallenge = await (await fetch('/api/challenges/current')).json();
+                if (updatedChallenge.challenge) {
+                    const totalVotes = updatedChallenge.challenge.votes.length;
+                    const approveVotes = updatedChallenge.challenge.votes.filter((v: any) => v.vote === 'approve').length;
+                    
+                    if (totalVotes >= updatedChallenge.challenge.requiredVotes) {
+                        if (approveVotes > totalVotes / 2) {
+                            // Le défi est validé
+                            console.log('Défi validé avec succès !');
+                            setShowConfetti(true);
+                            setTimeout(() => setShowConfetti(false), 10000); // Arrête les confettis après 10 secondes
+                            
+                            const completeResponse = await fetch('/api/challenges/complete', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    challengeId: currentChallenge._id,
+                                    userId: currentChallenge.assignedTo._id
+                                }),
+                            });
+                            
+                            if (completeResponse.ok) {
+                                setShowCreateForm(true);
+                            }
+                        } else {
+                            // Le défi est rejeté
+                            console.log('Défi rejeté par la majorité.');
+                            await fetch('/api/challenges/reject', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    challengeId: currentChallenge._id,
+                                    userId: currentChallenge.assignedTo._id
+                                }),
+                            });
+                        }
+                        await fetchCurrentChallenge();
+                    }
+                }
             } else {
                 setError(data.message || 'Erreur lors du vote');
             }
@@ -314,6 +354,15 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
 
     return (
         <div className={styles.container}>
+            {showConfetti && (
+                <ReactConfetti
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                    recycle={true}
+                    numberOfPieces={200}
+                    gravity={0.3}
+                />
+            )}
             {showCreateForm ? (
                 <div className={styles.createForm}>
                     <h3>Créer un nouveau défi</h3>
@@ -449,7 +498,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     className={styles.submitButton}
                                     disabled={isSubmitting || !mediaFile}
                                 >
-                                    {isSubmitting ? '⏳ Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vidéo' : 'la photo'}`}
+                                    {isSubmitting ? 'Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vidéo' : 'la photo'}`}
                                 </button>
                             </form>
                         </div>
@@ -484,7 +533,10 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                 <div className={styles.progressBar}>
                                     <div 
                                         className={styles.progressFill}
-                                        style={{ width: `${(approveVotes / currentChallenge.requiredVotes) * 100}%` }}
+                                        style={{ 
+                                            width: `${(approveVotes / (approveVotes + rejectVotes || 1)) * 100}%`,
+                                            backgroundColor: approveVotes > rejectVotes ? '#4CAF50' : '#f44336'
+                                        }}
                                     />
                                 </div>
                             </div>
