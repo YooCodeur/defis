@@ -3,6 +3,7 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from './ChallengeSection.module.css';
 import Image from 'next/image';
+import type { Challenge } from '@/app/types/challenge';
 
 interface User {
     _id: string;
@@ -14,6 +15,7 @@ interface Submission {
         url: string;
     };
     submittedBy: string;
+    mediaType: 'video' | 'photo';
 }
 
 interface Vote {
@@ -22,15 +24,10 @@ interface Vote {
     vote: 'approve' | 'reject';
 }
 
-interface Challenge {
-    _id: string;
-    title: string;
-    description: string;
-    status: 'active' | 'pending_validation' | 'pending_acceptance' | 'completed' | 'rejected';
-    assignedTo: User;
-    createdBy: User;
-    submission?: Submission;
-    votes: Vote[];
+interface Comment {
+    username: string;
+    content: string;
+    createdAt: string;
 }
 
 interface ChallengeSectionProps {
@@ -39,6 +36,14 @@ interface ChallengeSectionProps {
     setShowCreateForm: (show: boolean) => void;
     userId: string;
 }
+
+const isChallenge = (value: any): value is Challenge => {
+    return value && 
+           typeof value === 'object' && 
+           'status' in value && 
+           'assignedTo' in value &&
+           value.assignedTo?.username;
+};
 
 const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId }: ChallengeSectionProps) => {
     const [error, setError] = useState<string>('');
@@ -430,7 +435,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     <input
                                         type="file"
                                         accept={mediaType === 'video' ? 'video/*' : 'image/*'}
-                                        onChange={(e) => setMediaFile(e.target.files[0])}
+                                        onChange={(e) => e.target.files && setMediaFile(e.target.files[0])}
                                         required
                                     />
                                     <p className={styles.fileHint}>
@@ -558,11 +563,14 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                 </div>
             ) : (
                 <div className={styles.noChallenge}>
-                    {currentChallenge?.status === 'completed' ? (
-                        <p>En attente du prochain défi qui doit être créé par <span className={styles.username}>{currentChallenge.assignedTo.username}</span></p>
-                    ) : (
-                        <p>Aucun défi en cours</p>
-                    )}
+                    {(() => {
+                        if (!currentChallenge) return <p>Aucun défi en cours</p>;
+                        const challenge = currentChallenge as Challenge;
+                        if (challenge.status === 'completed') {
+                            return <p>En attente du prochain défi qui doit être créé par <span className={styles.username}>{challenge.assignedTo.username}</span></p>;
+                        }
+                        return <p>Aucun défi en cours</p>;
+                    })()}
                 </div>
             )}
         </div>
