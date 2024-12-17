@@ -8,7 +8,9 @@ const nextConfig = {
             },
         ];
     },
-    webSocketTimeout: 30000,
+    images: {
+        domains: ['res.cloudinary.com'],
+    },
 };
 
 module.exports = nextConfig; 
