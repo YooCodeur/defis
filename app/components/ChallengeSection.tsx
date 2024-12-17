@@ -68,6 +68,27 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     }, [currentChallenge]);
 
+    // Polling pour vérifier les nouveaux défis
+    useEffect(() => {
+        const pollInterval = setInterval(async () => {
+            try {
+                const response = await fetch('/api/challenges/current');
+                const data = await response.json();
+                if (data.success && data.challenge) {
+                    // Ne mettre à jour que si le défi est différent
+                    if (!currentChallenge || currentChallenge._id !== data.challenge._id) {
+                        console.log('Nouveau défi détecté:', data.challenge);
+                        setCurrentChallenge(data.challenge);
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du polling:', error);
+            }
+        }, 5000); // Vérifier toutes les 5 secondes
+
+        return () => clearInterval(pollInterval);
+    }, [currentChallenge]);
+
     const fetchCurrentChallenge = async () => {
         try {
             const response = await fetch('/api/challenges/current');
@@ -101,7 +122,10 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
             const data = await response.json();
 
             if (data.success) {
+                setCurrentChallenge(data.challenge);
                 setShowCreateForm(false);
+                setTitle('');
+                setDescription('');
                 await fetchCurrentChallenge();
             } else {
                 setError(data.message || 'Erreur lors de la création du défi');
