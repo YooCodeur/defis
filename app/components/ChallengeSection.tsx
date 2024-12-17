@@ -167,6 +167,11 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
 
         try {
             setIsSubmitting(true);
+            console.log('Tentative d\'acceptation du défi:', {
+                challengeId: currentChallenge._id,
+                userId: userId
+            });
+
             const response = await fetch('/api/challenges/accept', {
                 method: 'POST',
                 headers: {
@@ -180,13 +185,15 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
 
             const data = await response.json();
             if (data.success) {
-                setShowCreateForm(true); // Pour déclencher le rechargement des données
+                console.log('Défi accepté avec succès');
+                await fetchCurrentChallenge();
             } else {
+                console.error('Erreur lors de l\'acceptation:', data);
                 setError(data.message || 'Erreur lors de l\'acceptation du défi');
             }
         } catch (err) {
+            console.error('Erreur complète:', err);
             setError('Erreur lors de l\'acceptation du défi');
-            console.error(err);
         } finally {
             setIsSubmitting(false);
         }
@@ -498,7 +505,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     className={styles.submitButton}
                                     disabled={isSubmitting || !mediaFile}
                                 >
-                                    {isSubmitting ? 'Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vidéo' : 'la photo'}`}
+                                    {isSubmitting ? 'Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vid��o' : 'la photo'}`}
                                 </button>
                             </form>
                         </div>
