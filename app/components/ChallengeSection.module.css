@@ -1,9 +1,24 @@
 .container {
-    padding: 20px;
+    padding: 40px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.container p {
+    margin: 8px;
+}
+.container > * {
+    margin: 20px 0;
+}
+
+.container > *:first-child {
+    margin-top: 0;
+}
+
+.container > *:last-child {
+    margin-bottom: 0;
 }
 
 .form {

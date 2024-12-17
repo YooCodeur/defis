@@ -3,8 +3,8 @@ import Header from './components/Header';
 import './globals.css';
 
 export const metadata = {
-  title: 'Défis de Code',
-  description: 'Plateforme de défis de programmation',
+  title: 'Défis',
+  description: 'Plateforme de défis',
 };
 
 export default function RootLayout({ children }) {

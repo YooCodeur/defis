@@ -174,14 +174,14 @@ a.secondary {
   max-width: 1200px;
   margin: 0 auto 2rem;
   background: white;
-  padding: 1rem;
+  padding: 3rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
-  justify-content: space-between;
+justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .header:hover {
@@ -558,10 +558,9 @@ a.secondary {
 }
 
 .container {
-
   display: flex;
-  gap: 20px;
-  padding: 20px;
+  gap: 40px;
+  padding: 40px;
   max-width: 1200px;
   margin: 0 auto;
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ChallengeSection from './components/ChallengeSection';
 import styles from './page.module.css';
 import { Challenge } from './types/challenge';
+import LogoutButton from './components/LogoutButton';
 
 export default function HomePage() {
     const [userId, setUserId] = useState<string | null>(null);
@@ -12,6 +13,7 @@ export default function HomePage() {
     const [error, setError] = useState<string | null>(null);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [canCreateChallenge, setCanCreateChallenge] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const fetchCurrentChallenge = async () => {
         try {
@@ -51,6 +53,11 @@ export default function HomePage() {
             setIsLoading(false);
         };
         init();
+    }, []);
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+        setIsLoggedIn(!!userId);
     }, []);
 
     const handleCreateFormClose = async (success: boolean) => {
@@ -100,6 +107,7 @@ export default function HomePage() {
                     userId={userId}
                 />
             </div>
+            {isLoggedIn && <LogoutButton />}
         </main>
     );
 }
