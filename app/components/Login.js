@@ -49,7 +49,7 @@ export default function Login() {
                 {error && <p className={styles.error}>{error}</p>}
                 
                 <div className={styles.formGroup}>
-                    <label htmlFor="username">Nom d'utilisateur</label>
+                    <label htmlFor="username">Nom d&apos;utilisateur</label>
                     <input
                         type="text"
                         id="username"

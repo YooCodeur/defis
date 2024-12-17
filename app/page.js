@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './hooks/useAuth';
 import ChallengeDetails from './components/ChallengeDetails';
@@ -49,7 +49,7 @@ export default function Home() {
         }
     };
 
-    const checkCanCreate = async () => {
+    const checkCanCreate = useCallback(async () => {
         if (!user) return;
         
         try {
@@ -74,7 +74,7 @@ export default function Home() {
         } catch (err) {
             console.error("Erreur lors de la vérification des permissions:", err);
         }
-    };
+    }, [user]);
 
     const handleChallengeUpdate = () => {
         fetchCurrentChallenge();
@@ -108,7 +108,7 @@ export default function Home() {
         };
 
         init();
-    }, [user, authLoading]);
+    }, [user, authLoading, router, checkCanCreate]);
 
     if (authLoading || loading) {
         return <div className={styles.loading}>Chargement...</div>;

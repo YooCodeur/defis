@@ -1,7 +1,9 @@
 "use client"
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
 import styles from './page.module.css';
 
 interface Challenge {

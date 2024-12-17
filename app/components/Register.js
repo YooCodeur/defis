@@ -58,15 +58,16 @@ const Register = () => {
         <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit}>
                 {error && <div className={styles.error}>{error}</div>}
+                <label htmlFor="username">Nom d&apos;utilisateur</label>
                 <input
                     className={styles.input}
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Nom d'utilisateur"
+                    placeholder="Nom d&apos;utilisateur"
                     required
                     pattern="[a-zA-Z0-9_]+"
-                    title="Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores"
+                    title="Le nom d&apos;utilisateur ne peut contenir que des lettres, des chiffres et des underscores"
                     minLength={3}
                 />
                 <input
@@ -95,7 +96,7 @@ const Register = () => {
                     minLength={6}
                 />
                 <button className={styles.button} type="submit">
-                    S'inscrire
+                    S&apos;inscrire
                 </button>
             </form>
         </div>

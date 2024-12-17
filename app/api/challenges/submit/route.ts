@@ -64,10 +64,10 @@ export async function POST(request: Request) {
             }
         });
 
-    } catch (error: any) {
+    } catch (error: Error | unknown) {
         console.error('Erreur lors de la soumission:', error);
         return NextResponse.json(
-            { error: 'Erreur lors de la soumission de la solution' },
+            { error: error instanceof Error ? error.message : 'Erreur lors de la soumission de la solution' },
             { status: 500 }
         );
     }

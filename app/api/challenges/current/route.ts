@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/db';
 import Challenge from '@/app/models/Challenge';
-import mongoose from 'mongoose';
 
-interface IUser {
-    _id: string;
+interface Vote {
+    userId: {
+        _id: string;
+        username?: string;
+    } | string;
+    vote: 'approve' | 'reject';
+    votedAt: Date;
+}
+
+interface FormattedVote {
+    userId: string;
     username: string;
+    vote: 'approve' | 'reject';
 }
 
 export async function GET() {
@@ -46,7 +55,7 @@ export async function GET() {
         }
 
         // Créer une copie sûre du défi
-        let formattedChallenge = JSON.parse(JSON.stringify(challenge));
+        const formattedChallenge = JSON.parse(JSON.stringify(challenge));
 
         try {
             // Vérifier et formater les informations de l'utilisateur assigné
@@ -113,7 +122,7 @@ export async function GET() {
             // Formater les votes pour le front-end
             if (formattedChallenge.votes && Array.isArray(formattedChallenge.votes)) {
                 console.log("Votes avant formatage:", formattedChallenge.votes);
-                formattedChallenge.votes = formattedChallenge.votes.map(vote => {
+                formattedChallenge.votes = formattedChallenge.votes.map((vote: Vote): FormattedVote | null => {
                     try {
                         // Vérifier si userId est un objet peuplé ou juste un ID
                         const userId = typeof vote.userId === 'object' && vote.userId !== null
@@ -135,7 +144,7 @@ export async function GET() {
                         console.error("Erreur lors du formatage d'un vote:", err);
                         return null;
                     }
-                }).filter(vote => vote !== null);
+                }).filter((vote: FormattedVote | null): vote is FormattedVote => vote !== null);
                 console.log("Votes formatés:", formattedChallenge.votes);
             } else {
                 formattedChallenge.votes = [];

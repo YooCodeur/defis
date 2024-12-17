@@ -1,19 +1,54 @@
 // app/components/ChallengeSection.js
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from './ChallengeSection.module.css';
-import Modal from './Modal';
+import Image from 'next/image';
 
-const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId }) => {
-    const [error, setError] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [mediaFile, setMediaFile] = useState(null);
-    const [mediaType, setMediaType] = useState('video'); // 'video' ou 'photo'
-    const [currentChallenge, setCurrentChallenge] = useState(challenge);
-    const [commentText, setCommentText] = useState('');
+interface User {
+    _id: string;
+    username: string;
+}
+
+interface Submission {
+    media: {
+        url: string;
+    };
+    submittedBy: string;
+}
+
+interface Vote {
+    userId: string;
+    username: string;
+    vote: 'approve' | 'reject';
+}
+
+interface Challenge {
+    _id: string;
+    title: string;
+    description: string;
+    status: 'active' | 'pending_validation' | 'pending_acceptance' | 'completed' | 'rejected';
+    assignedTo: User;
+    createdBy: User;
+    submission?: Submission;
+    votes: Vote[];
+}
+
+interface ChallengeSectionProps {
+    challenge: Challenge | null;
+    showCreateForm: boolean;
+    setShowCreateForm: (show: boolean) => void;
+    userId: string;
+}
+
+const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId }: ChallengeSectionProps) => {
+    const [error, setError] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [mediaFile, setMediaFile] = useState<File | null>(null);
+    const [mediaType, setMediaType] = useState<'video' | 'photo'>('video');
+    const [currentChallenge, setCurrentChallenge] = useState<Challenge | null>(challenge);
+    const [commentText, setCommentText] = useState<string>('');
 
     useEffect(() => {
         setCurrentChallenge(challenge);
@@ -38,7 +73,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     };
 
-    const handleCreateChallenge = async (e) => {
+    const handleCreateChallenge = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
         setIsSubmitting(true);
@@ -72,10 +107,15 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     };
 
-    const handleMediaSubmit = async (e) => {
+    const handleMediaSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!mediaFile) {
             setError('Veuillez sélectionner un fichier');
+            return;
+        }
+
+        if (!currentChallenge) {
+            setError('Aucun défi actif trouvé');
             return;
         }
 
@@ -107,12 +147,17 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     };
 
-    const handleMediaTypeChange = (type) => {
+    const handleMediaTypeChange = (type: 'video' | 'photo') => {
         setMediaType(type);
-        setMediaFile(null); // Réinitialiser le fichier lors du changement de type
+        setMediaFile(null);
     };
 
     const handleAcceptChallenge = async () => {
+        if (!currentChallenge) {
+            setError('Aucun défi actif trouvé');
+            return;
+        }
+
         try {
             setIsSubmitting(true);
             const response = await fetch('/api/challenges/accept', {
@@ -141,6 +186,11 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
     };
 
     const handleRejectChallenge = async () => {
+        if (!currentChallenge) {
+            setError('Aucun défi actif trouvé');
+            return;
+        }
+
         try {
             setIsSubmitting(true);
             const response = await fetch('/api/challenges/reject', {
@@ -168,7 +218,12 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     };
 
-    const handleVote = async (vote) => {
+    const handleVote = async (vote: 'approve' | 'reject') => {
+        if (!currentChallenge) {
+            setError('Aucun défi actif trouvé');
+            return;
+        }
+
         try {
             setIsSubmitting(true);
             const response = await fetch('/api/challenges/vote', {
@@ -203,10 +258,15 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
         }
     };
 
-    const handleCommentSubmit = async (e) => {
+    const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!commentText) {
             setError('Veuillez écrire un commentaire');
+            return;
+        }
+
+        if (!currentChallenge) {
+            setError('Aucun défi actif trouvé');
             return;
         }
 
@@ -401,10 +461,12 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     controls
                                 />
                             ) : (
-                                <img 
-                                    className={styles.submittedImage}
+                                <Image 
                                     src={currentChallenge.submission.media.url}
                                     alt="Preuve soumise"
+                                    width={500}
+                                    height={300}
+                                    className={styles.mediaContent}
                                 />
                             )}
 
@@ -485,6 +547,12 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     </button>
                                 </form>
                             </div>
+                        </div>
+                    )}
+
+                    {isCreator && currentChallenge.status === 'active' && (
+                        <div className={styles.creatorMessage}>
+                            <p>Vous êtes le créateur de ce défi</p>
                         </div>
                     )}
                 </div>

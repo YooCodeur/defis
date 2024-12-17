@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import ChallengeSection from './components/ChallengeSection';
 import styles from './page.module.css';
 
@@ -37,7 +36,6 @@ export default function Home() {
     const [error, setError] = useState<string | null>(null);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [canCreateChallenge, setCanCreateChallenge] = useState(false);
-    const router = useRouter();
 
     const fetchCurrentChallenge = async () => {
         try {
@@ -79,17 +77,6 @@ export default function Home() {
         init();
     }, []);
 
-    const handleLogout = async () => {
-        try {
-            await fetch('/api/auth/logout', { method: 'POST' });
-            localStorage.removeItem('userId');
-            localStorage.removeItem('username');
-            router.push('/login');
-        } catch (error) {
-            console.error('Erreur lors de la déconnexion:', error);
-        }
-    };
-
     const handleCreateFormClose = async (success: boolean) => {
         setShowCreateForm(false);
         if (success) {
@@ -109,14 +96,11 @@ export default function Home() {
     return (
         <main className="container mx-auto px-4 py-8">
             <div className={styles.header}>
-                <h1 className={styles.title}>Défis à l'ORT : soyons fous et créatifs !</h1>
-              
+                <h1 className={styles.title}>Défis à l&apos;ORT : soyons fous et créatifs !</h1>
             </div>
-             
-                        <div className={styles.userSection}>
-                            <span className={styles.welcomeText}>Bonjour, {username}</span>
-                     
-                        </div>
+            <div className={styles.userSection}>
+                <span className={styles.welcomeText}>Bonjour, {username}</span>
+            </div>
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                     {error}

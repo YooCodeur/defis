@@ -1,6 +1,10 @@
 "use client"
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
+import Image from 'next/image';
 
 interface Comment {
     userId: string;
@@ -149,7 +153,7 @@ export default function HistoriquePage() {
                         <p className={styles.description}>{challenge.description}</p>
                         <div className={styles.users}>
                             <p>Créé par: <span>{challenge.createdBy.username}</span></p>
-                            <p>Assigné à: <span>{challenge.assignedTo.username}</span></p>
+                            <p>Assigné ��: <span>{challenge.assignedTo.username}</span></p>
                         </div>
                         {challenge.submission && (
                             <div className={styles.media}>
@@ -160,9 +164,11 @@ export default function HistoriquePage() {
                                         className={styles.mediaContent}
                                     />
                                 ) : (
-                                    <img 
+                                    <Image 
                                         src={challenge.submission.media.url}
                                         alt="Preuve du défi"
+                                        width={500}
+                                        height={300}
                                         className={styles.mediaContent}
                                     />
                                 )}

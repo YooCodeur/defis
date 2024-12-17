@@ -2,9 +2,14 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    // Ajout des headers CORS
-    const response = NextResponse.next();
+    // Utilisation de request pour créer la réponse
+    const response = NextResponse.next({
+        request: {
+            headers: request.headers
+        }
+    });
 
+    // Ajout des headers CORS
     response.headers.set('Access-Control-Allow-Credentials', 'true');
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT');

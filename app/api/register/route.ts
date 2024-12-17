@@ -3,6 +3,10 @@ import { connectDB } from '../../lib/db';
 import User from '../../models/User';
 import bcrypt from 'bcrypt';
 
+interface MongoError extends Error {
+    code?: number;
+}
+
 export async function POST(request: Request) {
     try {
         console.log('=== Début de l\'inscription ===');
@@ -78,24 +82,33 @@ export async function POST(request: Request) {
             { status: 201 }
         );
 
-    } catch (error: any) {
+    } catch (error: Error | MongoError | unknown) {
         console.error('=== Erreur lors de l\'inscription ===');
-        console.error('Type:', error.name);
-        console.error('Message:', error.message);
-        console.error('Stack:', error.stack);
         
-        if (error.code === 11000) {
+        if (error instanceof Error) {
+            console.error('Type:', error.name);
+            console.error('Message:', error.message);
+            console.error('Stack:', error.stack);
+            
+            const mongoError = error as MongoError;
+            if (mongoError.code === 11000) {
+                return NextResponse.json(
+                    { error: 'Ce nom d\'utilisateur est déjà utilisé' },
+                    { status: 400 }
+                );
+            }
+
             return NextResponse.json(
-                { error: 'Ce nom d\'utilisateur est déjà utilisé' },
-                { status: 400 }
+                { 
+                    error: 'Une erreur est survenue lors de l\'inscription',
+                    details: process.env.NODE_ENV === 'development' ? error.message : undefined
+                },
+                { status: 500 }
             );
         }
 
         return NextResponse.json(
-            { 
-                error: 'Une erreur est survenue lors de l\'inscription',
-                details: process.env.NODE_ENV === 'development' ? error.message : undefined
-            },
+            { error: 'Une erreur inconnue est survenue' },
             { status: 500 }
         );
     }

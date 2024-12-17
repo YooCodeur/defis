@@ -15,7 +15,8 @@ const UsersList = () => {
                 const data = await response.json();
                 setUsers(data.users);
             } catch (err) {
-                setError('Impossible de charger le classement');
+                console.error('Erreur lors du chargement du classement:', err);
+                setError(`Erreur lors du chargement du classement: ${err.message}`);
             } finally {
                 setLoading(false);
             }

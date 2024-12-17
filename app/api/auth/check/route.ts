@@ -6,6 +6,7 @@ import User from '../../../models/User';
 
 interface DecodedToken {
     userId: string;
+    username: string;
 }
 
 interface IUser {
@@ -14,7 +15,10 @@ interface IUser {
     firstName: string;
     lastName: string;
     points: number;
-    completedChallenges: any[];
+    completedChallenges: Array<{
+        challengeId: string;
+        completedAt: Date;
+    }>;
 }
 
 export async function GET() {

@@ -6,7 +6,7 @@ type MongooseCache = {
 };
 
 declare global {
-    var mongoose: MongooseCache;
+    let mongoose: MongooseCache;
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -15,7 +15,7 @@ if (!MONGODB_URI) {
     throw new Error('Veuillez définir l\'URI MongoDB dans les variables d\'environnement');
 }
 
-let cached = global.mongoose || { conn: null, promise: null };
+const cached = global.mongoose || { conn: null, promise: null };
 global.mongoose = cached;
 
 export async function connectDB() {

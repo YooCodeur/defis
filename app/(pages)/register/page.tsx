@@ -1,8 +1,9 @@
 "use client"
 import React from 'react';
-import Link from 'next/link';
-import styles from './page.module.css';
 import Register from '@/app/components/Register';
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default function RegisterPage() {
     return (

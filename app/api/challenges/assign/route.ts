@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/mongodb';
 import Challenge from '@/app/models/Challenge';
 import User from '@/app/models/User';
-import mongoose from 'mongoose';
 
 export async function POST(request: Request) {
     try {

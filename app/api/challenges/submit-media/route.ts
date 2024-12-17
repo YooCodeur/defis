@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/db';
 import { v2 as cloudinary } from 'cloudinary';
 import Challenge from '@/app/models/Challenge';
+import { Readable } from 'stream';
+
+interface CloudinaryResponse {
+    secure_url: string;
+    url: string;
+    public_id: string;
+}
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,7 +33,7 @@ export async function POST(request: Request) {
         const buffer = Buffer.from(bytes);
 
         // Upload vers Cloudinary
-        const uploadResponse: any = await new Promise((resolve, reject) => {
+        const uploadResponse: CloudinaryResponse = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     resource_type: mediaType === 'video' ? 'video' : 'image',
@@ -34,11 +41,11 @@ export async function POST(request: Request) {
                 },
                 (error, result) => {
                     if (error) reject(error);
-                    else resolve(result);
+                    else resolve(result as CloudinaryResponse);
                 }
             );
 
-            const bufferStream = require('stream').Readable.from(buffer);
+            const bufferStream = Readable.from(buffer);
             bufferStream.pipe(uploadStream);
         });
 
