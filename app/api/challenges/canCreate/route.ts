@@ -27,8 +27,8 @@ export async function GET(request: Request) {
             });
         }
 
-        // yoco908989 peut toujours créer des défis
-        if (user.username === 'yoco908989') {
+        // yoco peut toujours créer des défis
+        if (user.username === 'yoco') {
             return NextResponse.json({
                 success: true,
                 canCreate: true,
