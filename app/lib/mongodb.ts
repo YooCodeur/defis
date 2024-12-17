@@ -12,7 +12,7 @@ declare global {
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-    throw new Error('Veuillez définir l\'URI MongoDB dans les variables d\'environnement');
+    throw new Error('Veuillez définir la variable d\'environnement MONGODB_URI');
 }
 
 let cached = global.mongoose || { conn: null, promise: null };
@@ -20,6 +20,7 @@ global.mongoose = cached;
 
 export async function connectDB() {
     if (cached.conn) {
+        console.log('Utilisation de la connexion MongoDB existante');
         return cached.conn;
     }
 
@@ -34,12 +35,15 @@ export async function connectDB() {
             tls: true
         };
 
+        console.log('Création d\'une nouvelle connexion MongoDB...');
         try {
             cached.promise = mongoose.connect(MONGODB_URI!, opts);
             const instance = await cached.promise;
             cached.conn = instance;
+            console.log('MongoDB connecté avec succès');
             return instance;
         } catch (error) {
+            console.error('Erreur de connexion MongoDB:', error);
             cached.promise = null;
             cached.conn = null;
             throw error;

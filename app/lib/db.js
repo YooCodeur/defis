@@ -1,25 +1,20 @@
 import mongoose from 'mongoose';
 
-type MongooseCache = {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-};
-
-declare global {
-    var mongoose: MongooseCache;
-}
-
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
     throw new Error('Veuillez définir l\'URI MongoDB dans les variables d\'environnement');
 }
 
-let cached = global.mongoose || { conn: null, promise: null };
-global.mongoose = cached;
+let cached = global.mongoose;
+
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
 
 export async function connectDB() {
     if (cached.conn) {
+        console.log('Utilisation de la connexion MongoDB existante');
         return cached.conn;
     }
 
@@ -27,29 +22,26 @@ export async function connectDB() {
         const opts = {
             bufferCommands: true,
             maxPoolSize: 10,
-            serverSelectionTimeoutMS: 60000,
-            socketTimeoutMS: 60000,
-            family: 4,
+            serverSelectionTimeoutMS: 30000,
+            socketTimeoutMS: 45000,
             ssl: true,
             tls: true
         };
 
-        try {
-            cached.promise = mongoose.connect(MONGODB_URI!, opts);
-            const instance = await cached.promise;
-            cached.conn = instance;
-            return instance;
-        } catch (error) {
+        console.log('Création d\'une nouvelle connexion MongoDB...');
+        cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+            console.log('MongoDB connecté avec succès');
+            return mongoose;
+        }).catch((error) => {
+            console.error('Erreur de connexion MongoDB:', error);
             cached.promise = null;
-            cached.conn = null;
             throw error;
-        }
+        });
     }
 
     try {
-        const instance = await cached.promise;
-        cached.conn = instance;
-        return instance;
+        cached.conn = await cached.promise;
+        return cached.conn;
     } catch (e) {
         cached.promise = null;
         throw e;

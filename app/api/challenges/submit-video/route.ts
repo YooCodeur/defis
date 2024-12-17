@@ -3,6 +3,11 @@ import { connectDB } from '@/app/lib/mongodb';
 import Challenge from '@/app/models/Challenge';
 import cloudinary from '@/app/lib/cloudinary';
 
+interface CloudinaryResponse {
+    secure_url: string;
+    public_id: string;
+}
+
 export async function POST(request: Request) {
     try {
         await connectDB();
@@ -19,11 +24,10 @@ export async function POST(request: Request) {
             );
         }
 
-        // Upload vers Cloudinary
         const bytes = await video.arrayBuffer();
         const buffer = Buffer.from(bytes);
         
-        const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadResponse = await new Promise<CloudinaryResponse>((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 {
                     resource_type: 'video',
@@ -31,12 +35,11 @@ export async function POST(request: Request) {
                 },
                 (error, result) => {
                     if (error) reject(error);
-                    else resolve(result);
+                    else resolve(result as CloudinaryResponse);
                 }
             ).end(buffer);
         });
 
-        // Mettre à jour le défi
         const challenge = await Challenge.findById(challengeId);
         if (!challenge) {
             return NextResponse.json(

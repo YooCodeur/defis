@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/app/lib/mongodb';
+import { connectDB } from '@/app/lib/db';
 import Challenge from '@/app/models/Challenge';
 import User from '@/app/models/User';
 import mongoose from 'mongoose';
@@ -59,15 +59,27 @@ export async function POST(request: Request) {
         };
         console.log('Données du défi:', challengeData);
 
-        const challenge = await Challenge.create(challengeData);
-        console.log('Défi créé avec succès:', challenge._id);
+        let challenge = await Challenge.create(challengeData);
+        
+        // Récupérer le défi avec les informations peuplées
+        challenge = await Challenge.findById(challenge._id)
+            .populate({
+                path: 'assignedTo',
+                select: 'username _id',
+                model: 'User'
+            })
+            .lean();
+
+        console.log('Défi créé avec succès:', challenge);
 
         return NextResponse.json({ 
             success: true, 
-            challenge,
-            assignedTo: {
-                id: selectedUser._id,
-                username: selectedUser.username
+            challenge: {
+                ...challenge,
+                assignedTo: {
+                    _id: selectedUser._id.toString(),
+                    username: selectedUser.username
+                }
             }
         });
 

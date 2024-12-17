@@ -1,36 +1,57 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/app/lib/mongodb';
+import { connectDB } from '@/app/lib/db';
 import Challenge from '@/app/models/Challenge';
 
 export async function GET() {
     try {
+        console.log('=== Début de la récupération de l\'historique ===');
         await connectDB();
+        console.log('MongoDB connecté');
 
-        const recentChallenges = await Challenge.find({
-            status: 'completed',
-            'submission.video.url': { $exists: true }
+        // Récupérer tous les défis avec leurs soumissions, triés par date de création
+        const challenges = await Challenge.find({
+            $or: [
+                { status: 'completed' },
+                { status: 'rejected' },
+                { 
+                    status: 'pending_validation',
+                    'submission': { $exists: true }
+                }
+            ]
         })
-        .sort({ completedAt: -1 })
-        .limit(5)
-        .populate('assignedTo', 'username')
         .populate('createdBy', 'username')
-        .lean();
+        .populate('assignedTo', 'username')
+        .sort({ createdAt: -1 });
+
+        console.log(`${challenges.length} défis trouvés`);
 
         return NextResponse.json({
             success: true,
-            challenges: recentChallenges.map(challenge => ({
+            challenges: challenges.map(challenge => ({
+                _id: challenge._id,
                 title: challenge.title,
                 description: challenge.description,
-                completedBy: challenge.assignedTo?.username,
-                createdBy: challenge.createdBy?.username,
+                createdBy: challenge.createdBy,
+                assignedTo: challenge.assignedTo,
+                status: challenge.status,
                 completedAt: challenge.completedAt,
-                videoUrl: challenge.submission?.video?.url
+                submission: challenge.submission,
+                createdAt: challenge.createdAt
             }))
         });
+
     } catch (error) {
-        console.error('Erreur récupération historique:', error);
+        console.error('=== Erreur lors de la récupération de l\'historique ===');
+        console.error('Type:', error instanceof Error ? error.constructor.name : typeof error);
+        console.error('Message:', error instanceof Error ? error.message : String(error));
+        console.error('Stack:', error instanceof Error ? error.stack : '');
+        
         return NextResponse.json(
-            { success: false, message: 'Erreur lors de la récupération de l\'historique' },
+            { 
+                success: false, 
+                message: 'Erreur lors de la récupération de l\'historique',
+                error: error instanceof Error ? error.message : 'Erreur inconnue'
+            },
             { status: 500 }
         );
     }

@@ -4,10 +4,23 @@ import jwt from 'jsonwebtoken';
 import { connectDB } from '../../../lib/db';
 import User from '../../../models/User';
 
+interface DecodedToken {
+    userId: string;
+}
+
+interface IUser {
+    _id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    points: number;
+    completedChallenges: any[];
+}
+
 export async function GET() {
     try {
-        const cookieStore = cookies();
-        const token = cookieStore.get('auth_token');
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_token')?.value;
 
         if (!token) {
             return NextResponse.json(
@@ -16,11 +29,12 @@ export async function GET() {
             );
         }
 
-        const decoded = jwt.verify(token.value, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
         await connectDB();
 
-        const user = await User.findById(decoded.userId)
-            .select('_id username firstName lastName points completedChallenges');
+        const user = (await User.findById(decoded.userId)
+            .select('_id username firstName lastName points completedChallenges')
+            .lean()) as unknown as IUser;
 
         if (!user) {
             return NextResponse.json(

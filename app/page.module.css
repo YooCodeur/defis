@@ -46,7 +46,11 @@
 .main li:not(:last-of-type) {
   margin-bottom: 8px;
 }
-
+.welcomeText {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
 .main code {
   font-family: inherit;
   background: var(--gray-alpha-100);
@@ -170,13 +174,14 @@ a.secondary {
   max-width: 1200px;
   margin: 0 auto 2rem;
   background: white;
-  padding: 1.5rem 2rem;
+  padding: 1rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.3s ease;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .header:hover {
@@ -189,8 +194,129 @@ a.secondary {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 700;
+  text-align: center;
+}
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.welcomeText {
+  color: #666;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.headerButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.buttonText {
+  display: inline;
+}
+
+.buttonEmoji {
+  display: inline;
+}
+
+.logoutButton {
+  composes: headerButton;
+  background: #ff5252;
+  color: white;
+}
+
+.logoutButton:hover {
+  background: #ff3333;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem;
+    flex-direction: column;
+    margin: 1rem 0.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.2rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .userSection {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .welcomeText {
+    font-size: 0.8rem;
+  }
+
+  .headerButton {
+    padding: 0.4rem;
+    font-size: 1.2rem;
+    min-width: 40px;
+    justify-content: center;
+  }
+
+  .buttonText {
+    display: none;
+  }
+
+  .buttonEmoji {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.5rem;
+    margin: 0.5rem;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+  }
+
+  .userSection {
+    gap: 0.4rem;
+  }
+
+  .welcomeText {
+    font-size: 0.7rem;
+  }
+
+  .headerButton {
+    padding: 0.35rem;
+    min-width: 32px;
+  }
+
+  .buttonEmoji {
+    font-size: 1.1rem;
+  }
 }
 
 .content {
@@ -387,21 +513,14 @@ a.secondary {
 }
 
 .logoutButton {
-  background: linear-gradient(45deg, #ff5252, #f48fb1);
+  background: #ff5252;
   color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.2);
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
 }
 
 .logoutButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
+  background: #ff3333;
 }
 
 .createMessage {
@@ -439,11 +558,12 @@ a.secondary {
 }
 
 .container {
+
   display: flex;
-  gap: 30px;
+  gap: 20px;
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .mainContent {
@@ -452,64 +572,381 @@ a.secondary {
 
 .sidebar {
   width: 300px;
-  position: sticky;
-  top: 20px;
-  height: fit-content;
-}
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    position: static;
-  }
 }
 
 .currentChallenge {
   background: white;
-  padding: 20px;
   border-radius: 12px;
-  margin: 20px 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
-.assignedTo {
-  margin-top: 10px;
-  padding: 10px;
-  background: #f0f7ff;
-  border-radius: 6px;
-  color: #333;
+.assignedBanner {
+  background: linear-gradient(45deg, #0070f3, #00a6ed);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  animation: pulse 2s infinite;
 }
 
-.assignedTo span {
-  font-weight: 600;
-  color: #0070f3;
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }
 
 .challengeDetails {
-  background: #f8f9fa;
   padding: 20px;
-  border-radius: 8px;
-  margin-top: 10px;
+}
+
+.challengeDetails h2 {
+  color: #0070f3;
+  margin-bottom: 15px;
 }
 
 .challengeDetails h3 {
-  color: #0070f3;
+  font-size: 1.5rem;
   margin-bottom: 10px;
 }
 
-.assignedTo {
-  margin-top: 15px;
-  padding: 10px;
-  background: #e8f0fe;
-  border-radius: 6px;
-  display: inline-block;
+.videoUploadSection {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
-.assignedTo span {
-  font-weight: 600;
+.videoUploadSection h4 {
   color: #0070f3;
+  margin-bottom: 15px;
+}
+
+.videoForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.fileInput {
+  border: 2px dashed #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.fileInput:hover {
+  border-color: #0070f3;
+}
+
+.fileHint {
+  color: #666;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.submitButton {
+  background: #0070f3;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submitButton:hover {
+  background: #0051cc;
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #e00;
+  padding: 10px;
+  background: #fee;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.mediaTypeSelector {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+}
+
+.mediaTypeSelector label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mediaTypeSelector label:hover {
+    background: #e8f0fe;
+}
+
+.mediaTypeSelector input[type="radio"] {
+    margin: 0;
+}
+
+.mediaTypeSelector label:has(input:checked) {
+    background: #e8f0fe;
+    color: #0070f3;
+    font-weight: 500;
+}
+
+/* Renommer les classes existantes */
+.videoUploadSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.videoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Nouvelles classes pour le support des médias */
+.mediaUploadSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.mediaForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.validationSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.mediaPreview {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.submittedMedia {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.votingSection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.votingButtons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.voteButton {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.approveButton {
+    background: #4CAF50;
+    color: white;
+}
+
+.approveButton:hover {
+    background: #388E3C;
+    transform: translateY(-2px);
+}
+
+.rejectButton {
+    background: #f44336;
+    color: white;
+}
+
+.rejectButton:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+.votingProgress {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+}
+
+.votingStats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.progressBar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(45deg, #0070f3, #00a6ed);
+    transition: width 0.3s ease;
+}
+
+.resetSection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.resetButton {
+    background: #ff9800;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+}
+
+.resetButton:hover {
+    background: #f57c00;
+    transform: translateY(-2px);
+}
+
+.createChallengePrompt {
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(45deg, #0070f3, #00a6ed);
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.createChallengePrompt h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.createButton {
+    background: white;
+    color: #0070f3;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.createButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.username {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.logoutButton {
+    background: #ff5252;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.logoutButton:hover {
+    background: #ff3333;
+}
+
+/* Styles des boutons */
+.headerButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: auto;
+}
+
+.logoutButton {
+  composes: headerButton;
+  background: #ff5252;
+  color: white;
+}
+
+.logoutButton:hover {
+  background: #ff3333;
 }

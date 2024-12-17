@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/app/lib/mongodb';
+import { connectDB } from '@/app/lib/db';
 import Challenge from '@/app/models/Challenge';
 import User from '@/app/models/User';
 import { selectNextUser } from '@/app/lib/userSelection';
@@ -19,7 +19,8 @@ export async function POST(request: Request) {
         }
 
         if (!accept) {
-            // Retirer 5 points à l'utilisateur
+            // Retirer 5 points à l'utilisateur qui refuse le défi
+            console.log('Retrait des points pour refus du défi');
             await User.findByIdAndUpdate(userId, {
                 $inc: { points: -5 }
             });
@@ -42,7 +43,8 @@ export async function POST(request: Request) {
                 newAssignee: {
                     id: newUser._id,
                     username: newUser.username
-                }
+                },
+                pointsUpdated: true
             });
         }
 
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
         });
 
     } catch (error) {
-        console.error('Erreur réponse défi:', error);
+        console.error('Erreur lors de la réponse au défi:', error);
         return NextResponse.json(
             { success: false, message: 'Erreur lors de la réponse au défi' },
             { status: 500 }

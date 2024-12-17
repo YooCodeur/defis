@@ -36,7 +36,7 @@ const challengeSchema = new mongoose.Schema({
         default: 'pending_acceptance'
     },
     votes: [{
-        user: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
@@ -51,9 +51,33 @@ const challengeSchema = new mongoose.Schema({
             default: Date.now
         }
     }],
+    comments: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     submission: {
-        video: {
+        mediaType: {
+            type: String,
+            enum: ['video', 'photo']
+        },
+        media: {
             url: String,
+            secure_url: String,
             publicId: String
         },
         submittedAt: Date,

@@ -6,7 +6,15 @@ interface IUser extends Document {
     firstName: string;
     lastName: string;
     password: string;
+    points: number;
+    completedChallenges: Array<{
+        challenge: mongoose.Types.ObjectId;
+        completedAt: Date;
+    }>;
+    lastCycleChallengeDate: Date | null;
+    currentCycle: number;
     createdAt: Date;
+    lastChallengeAssignedAt: Date | null;
 }
 
 // Définition du schéma
@@ -33,9 +41,35 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String, 
         required: [true, 'Le mot de passe est requis']
     },
+    points: {
+        type: Number,
+        default: 0
+    },
+    completedChallenges: [{
+        challenge: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Challenge'
+        },
+        completedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    lastCycleChallengeDate: {
+        type: Date,
+        default: null
+    },
+    currentCycle: {
+        type: Number,
+        default: 0
+    },
     createdAt: { 
         type: Date, 
         default: Date.now 
+    },
+    lastChallengeAssignedAt: {
+        type: Date,
+        default: null
     }
 });
 

@@ -1,0 +1,38 @@
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.title {
+    text-align: center;
+    color: #1a73e8;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem auto;
+    }
+
+    .title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+} 

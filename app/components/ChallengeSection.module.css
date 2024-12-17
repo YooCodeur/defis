@@ -3,6 +3,7 @@
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 2rem;
 }
 
 .form {
@@ -421,55 +422,107 @@
 }
 
 .validationSection {
-    margin-top: 20px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.videoContainer {
-    margin: 20px 0;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #000;
+.validationSection h4 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #333;
 }
 
-.challengeVideo {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
+.submittedImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1rem auto;
     display: block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.votingStats {
-    margin-top: 20px;
-    padding: 15px;
+.votingProgress {
+    margin: 1.5rem 0;
+    padding: 1rem;
     background: #f8f9fa;
     border-radius: 8px;
 }
 
+.votingStats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
 .progressBar {
     height: 8px;
-    background: #eee;
+    background: #e0e0e0;
     border-radius: 4px;
-    margin-top: 10px;
     overflow: hidden;
 }
 
 .progressFill {
     height: 100%;
-    background: #4CAF50;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
     transition: width 0.3s ease;
+}
+
+.votingButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.approveButton, .rejectButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.approveButton {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.approveButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.rejectButton {
+    background: linear-gradient(45deg, #f44336, #e53935);
+    color: white;
+}
+
+.rejectButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.approveButton:disabled, .rejectButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .votedMessage {
     text-align: center;
     color: #666;
-    padding: 10px;
-    background: #f0f0f0;
-    border-radius: 6px;
-    margin: 15px 0;
+    margin-top: 1rem;
+    font-style: italic;
 }
 
 .historySection {
@@ -576,4 +629,301 @@
     max-width: 450px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.assignedInfo {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #0070f3;
+}
+
+.assignedUser {
+    font-weight: 600;
+    color: #0070f3;
+}
+
+.status {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.acceptanceButtons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.acceptButton, .rejectButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.acceptButton {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.acceptButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.rejectButton {
+    background: linear-gradient(45deg, #f44336, #e53935);
+    color: white;
+}
+
+.rejectButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.acceptButton:disabled, .rejectButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.mediaTypeSelector {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.mediaTypeButton {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mediaTypeButton:hover {
+    transform: translateY(-2px);
+    border-color: #0070f3;
+    color: #0070f3;
+}
+
+.mediaTypeButton.active {
+    background: #0070f3;
+    color: white;
+    border-color: #0070f3;
+}
+
+.mediaUploadSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mediaForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.fileInput {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px dashed #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.fileInput:hover {
+    border-color: #0070f3;
+}
+
+.fileHint {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.commentsSection {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.commentsSection h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.commentsList {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.comment {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.commentUser {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.commentDate {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.commentContent {
+    color: #333;
+    line-height: 1.4;
+}
+
+.commentForm {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.commentInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.commentInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+}
+
+.commentButton {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.commentButton:hover {
+    background: #1557b0;
+    transform: translateY(-2px);
+}
+
+.commentButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Style de la barre de défilement pour les commentaires */
+.commentsList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.commentsList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.commentsList::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.commentsList::-webkit-scrollbar-thumb:hover {
+    background: #666;
+} 
+
+.actionButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.acceptButton, .rejectButton {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+    min-width: 160px;
+}
+
+.acceptButton {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.acceptButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(45deg, #45a049, #388E3C);
+}
+
+.rejectButton {
+    background: linear-gradient(45deg, #f44336, #e53935);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.rejectButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+    background: linear-gradient(45deg, #e53935, #d32f2f);
+}
+
+.acceptButton:disabled, .rejectButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 } 
