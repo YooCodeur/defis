@@ -6,9 +6,19 @@ import styles from './Header.module.css';
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
+    const checkLoginStatus = () => {
         const userId = localStorage.getItem('userId');
         setIsLoggedIn(!!userId);
+    };
+
+    useEffect(() => {
+        // Vérification initiale
+        checkLoginStatus();
+
+        // Vérifier toutes les 100ms
+        const interval = setInterval(checkLoginStatus, 100);
+
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -16,21 +26,24 @@ const Header = () => {
             <nav className="max-w-7xl mx-auto">
                 <div className="overflow-x-auto whitespace-nowrap py-4 px-4">
                     <div className={styles.navLinks}>
-                        <Link href="/" className={styles.link}>
-                            🏠 Accueil
-                        </Link>
-                        <Link href="/historique" className={styles.link}>
-                            📜 Historique
-                        </Link>
-                        <Link href="/classement" className={styles.headerButton}>
-                            <span className={styles.buttonEmoji}>🏆</span>
-                            <span className={styles.buttonText}>Classement</span>
-                        </Link>
-                        <Link href="/chat" className={styles.headerButton}>
-                            <span className={styles.buttonEmoji}>💬</span>
-                            <span className={styles.buttonText}>Chat</span>
-                        </Link>
-                        {!isLoggedIn && (
+                        {isLoggedIn ? (
+                            <>
+                                <Link href="/" className={styles.link}>
+                                    🏠 Accueil
+                                </Link>
+                                <Link href="/historique" className={styles.link}>
+                                    📜 Historique
+                                </Link>
+                                <Link href="/classement" className={styles.headerButton}>
+                                    <span className={styles.buttonEmoji}>🏆</span>
+                                    <span className={styles.buttonText}>Classement</span>
+                                </Link>
+                                <Link href="/chat" className={styles.headerButton}>
+                                    <span className={styles.buttonEmoji}>💬</span>
+                                    <span className={styles.buttonText}>Chat</span>
+                                </Link>
+                            </>
+                        ) : (
                             <Link href="/login" className={styles.headerButton}>
                                 <span className={styles.buttonEmoji}>🔑</span>
                                 <span className={styles.buttonText}>Connexion</span>
