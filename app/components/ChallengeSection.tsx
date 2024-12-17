@@ -141,8 +141,12 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
 
             const data = await response.json();
             if (data.success) {
-                await fetchCurrentChallenge();
                 setMediaFile(null);
+                const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+                await fetchCurrentChallenge();
             } else {
                 throw new Error(data.message);
             }
@@ -467,7 +471,7 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                         </div>
                     )}
 
-                    {isAssignedUser && currentChallenge.status === 'active' && (
+                    {currentChallenge.status === 'active' && isAssignedUser && (
                         <div className={styles.mediaUploadSection}>
                             <h4>📸 Soumettre votre preuve</h4>
                             <div className={styles.mediaTypeSelector}>
@@ -505,15 +509,15 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                     className={styles.submitButton}
                                     disabled={isSubmitting || !mediaFile}
                                 >
-                                    {isSubmitting ? 'Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vid��o' : 'la photo'}`}
+                                    {isSubmitting ? 'Envoi en cours...' : `📤 Envoyer ${mediaType === 'video' ? 'la vidéo' : 'la photo'}`}
                                 </button>
                             </form>
                         </div>
                     )}
 
-                    {currentChallenge.status === 'pending_validation' && currentChallenge.submission && (
+                    {currentChallenge.submission && (
                         <div className={styles.validationSection}>
-                            <h4>Validation du défi</h4>
+                            <h4>Preuve soumise</h4>
                             
                             {currentChallenge.submission.mediaType === 'video' ? (
                                 <video 
@@ -531,86 +535,90 @@ const ChallengeSection = ({ challenge, showCreateForm, setShowCreateForm, userId
                                 />
                             )}
 
-                            <div className={styles.votingProgress}>
-                                <div className={styles.votingStats}>
-                                    <span>Pour : {approveVotes}</span>
-                                    <span>Contre : {rejectVotes}</span>
-                                    <span>Requis : {currentChallenge.requiredVotes}</span>
-                                </div>
-                                <div className={styles.progressBar}>
-                                    <div 
-                                        className={styles.progressFill}
-                                        style={{ 
-                                            width: `${(approveVotes / (approveVotes + rejectVotes || 1)) * 100}%`,
-                                            backgroundColor: approveVotes > rejectVotes ? '#4CAF50' : '#f44336'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {!isAssignedUser && !hasUserVoted && (
-                                <div className={styles.votingButtons}>
-                                    <button
-                                        onClick={() => handleVote('approve')}
-                                        className={styles.approveButton}
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? 'En cours...' : '✅ Valider'}
-                                    </button>
-                                    <button
-                                        onClick={() => handleVote('reject')}
-                                        className={styles.rejectButton}
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? 'En cours...' : '❌ Rejeter'}
-                                    </button>
-                                </div>
-                            )}
-
-                            {hasUserVoted && (
-                                <p className={styles.votedMessage}>
-                                    Vous avez déjà voté pour ce défi
-                                </p>
-                            )}
-
-                            <div className={styles.commentsSection}>
-                                <h4>💬 Commentaires</h4>
-                                <div className={styles.commentsList}>
-                                    {currentChallenge.comments?.map((comment, index) => (
-                                        <div key={index} className={styles.comment}>
-                                            <div className={styles.commentHeader}>
-                                                <span className={styles.commentUser}>{comment.username}</span>
-                                                <span className={styles.commentDate}>
-                                                    {new Date(comment.createdAt).toLocaleDateString('fr-FR', {
-                                                        day: 'numeric',
-                                                        month: 'short',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
-                                                </span>
-                                            </div>
-                                            <p className={styles.commentContent}>{comment.content}</p>
+                            {currentChallenge.status === 'pending_validation' && (
+                                <>
+                                    <div className={styles.votingProgress}>
+                                        <div className={styles.votingStats}>
+                                            <span>Pour : {approveVotes}</span>
+                                            <span>Contre : {rejectVotes}</span>
+                                            <span>Requis : {currentChallenge.requiredVotes}</span>
                                         </div>
-                                    ))}
-                                </div>
-                                <form onSubmit={handleCommentSubmit} className={styles.commentForm}>
-                                    <input
-                                        type="text"
-                                        value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}
-                                        placeholder="Ajouter un commentaire..."
-                                        className={styles.commentInput}
-                                        required
-                                    />
-                                    <button
-                                        type="submit"
-                                        className={styles.commentButton}
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? '⏳' : '📤'}
-                                    </button>
-                                </form>
-                            </div>
+                                        <div className={styles.progressBar}>
+                                            <div 
+                                                className={styles.progressFill}
+                                                style={{ 
+                                                    width: `${(approveVotes / (approveVotes + rejectVotes || 1)) * 100}%`,
+                                                    backgroundColor: approveVotes > rejectVotes ? '#4CAF50' : '#f44336'
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {!isAssignedUser && !hasUserVoted && (
+                                        <div className={styles.votingButtons}>
+                                            <button
+                                                onClick={() => handleVote('approve')}
+                                                className={styles.approveButton}
+                                                disabled={isSubmitting}
+                                            >
+                                                {isSubmitting ? 'En cours...' : '✅ Valider'}
+                                            </button>
+                                            <button
+                                                onClick={() => handleVote('reject')}
+                                                className={styles.rejectButton}
+                                                disabled={isSubmitting}
+                                            >
+                                                {isSubmitting ? 'En cours...' : '❌ Rejeter'}
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {hasUserVoted && (
+                                        <p className={styles.votedMessage}>
+                                            Vous avez déjà voté pour ce défi
+                                        </p>
+                                    )}
+
+                                    <div className={styles.commentsSection}>
+                                        <h4>💬 Commentaires</h4>
+                                        <div className={styles.commentsList}>
+                                            {currentChallenge.comments?.map((comment, index) => (
+                                                <div key={index} className={styles.comment}>
+                                                    <div className={styles.commentHeader}>
+                                                        <span className={styles.commentUser}>{comment.username}</span>
+                                                        <span className={styles.commentDate}>
+                                                            {new Date(comment.createdAt).toLocaleDateString('fr-FR', {
+                                                                day: 'numeric',
+                                                                month: 'short',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit'
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                    <p className={styles.commentContent}>{comment.content}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <form onSubmit={handleCommentSubmit} className={styles.commentForm}>
+                                            <input
+                                                type="text"
+                                                value={commentText}
+                                                onChange={(e) => setCommentText(e.target.value)}
+                                                placeholder="Ajouter un commentaire..."
+                                                className={styles.commentInput}
+                                                required
+                                            />
+                                            <button
+                                                type="submit"
+                                                className={styles.commentButton}
+                                                disabled={isSubmitting}
+                                            >
+                                                {isSubmitting ? '⏳' : '📤'}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     )}
 
