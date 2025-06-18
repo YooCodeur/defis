@@ -3,7 +3,7 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from './ChallengeSection.module.css';
 import Image from 'next/image';
-import type { Challenge } from '@/app/types/challenge';
+import type { Challenge } from '@/types/challenge';
 import ReactConfetti from 'react-confetti';
 
 interface User {

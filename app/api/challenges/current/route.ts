@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/db';
 import Challenge from '@/app/models/Challenge';
+import getUser from '@/app/models/User';
 
 interface Vote {
     userId: {
@@ -22,6 +23,8 @@ export async function GET() {
     try {
         await connectDB();
         console.log("MongoDB connecté");
+        
+        const User = getUser;  // Obtenir le modèle User
 
         // Chercher le défi actif ou en attente de validation
         const challenge = await Challenge.findOne({
@@ -30,17 +33,17 @@ export async function GET() {
         .populate({
             path: 'assignedTo',
             select: 'username _id',
-            model: 'User'
+            model: User
         })
         .populate({
             path: 'createdBy',
             select: 'username _id',
-            model: 'User'
+            model: User
         })
         .populate({
             path: 'votes.userId',
             select: 'username _id',
-            model: 'User'
+            model: User
         })
         .lean();
 

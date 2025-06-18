@@ -4,9 +4,9 @@ console.log('=== Initialisation de Cloudinary ===');
 
 // Configuration directe de Cloudinary
 cloudinary.config({
-    cloud_name: 'dg9kvalka',
-    api_key: '183859651119939',
-    api_secret: process.env.CLOUDINARY_API_SECRET || 'yEEnn-WLfAMqJsHiuhdJK_L36p8'
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 // Vérifier la configuration

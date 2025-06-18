@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/mongodb';
 import Challenge from '@/app/models/Challenge';
-import User from '@/app/models/User';
-import ChallengeAssignmentHistory from '@/app/models/ChallengeAssignmentHistory';
+import getUser from '@/app/models/User';
 
 export async function POST(request: Request) {
     try {
         await connectDB();
         
         const { challengeId } = await request.json();
+        const User = getUser;  // Obtenir le modèle User
 
         // Récupérer le défi
         const challenge = await Challenge.findById(challengeId);
@@ -31,46 +31,40 @@ export async function POST(request: Request) {
             );
         }
 
-        // Récupérer ou créer l'historique d'attribution pour chaque utilisateur
-        const histories = await Promise.all(users.map(async (user) => {
-            const history = await ChallengeAssignmentHistory.findOne({ userId: user._id });
-            if (!history) {
-                return ChallengeAssignmentHistory.create({
-                    userId: user._id,
-                    lastAssignedAt: null,
-                    assignmentCount: 0
-                });
-            }
-            return history;
-        }));
+        // Trouver le cycle actuel maximum
+        const maxCycle = Math.max(...users.map(user => user.currentCycle));
 
-        // Trouver les utilisateurs avec le moins de défis assignés
-        const minAssignments = Math.min(...histories.map(h => h.assignmentCount));
-        const eligibleUsers = users.filter((user, index) => 
-            histories[index].assignmentCount === minAssignments
+        // Filtrer les utilisateurs éligibles (ceux qui n'ont pas encore eu de défi dans le cycle actuel)
+        let eligibleUsers = users.filter(user => 
+            user.currentCycle < maxCycle || 
+            !user.lastCycleChallengeDate
         );
+
+        // Si tous les utilisateurs ont déjà eu un défi dans ce cycle, on commence un nouveau cycle
+        if (eligibleUsers.length === 0) {
+            eligibleUsers = users;
+            // On incrémentera le cycle pour l'utilisateur sélectionné
+        }
 
         // Parmi les utilisateurs éligibles, sélectionner celui qui n'a pas eu de défi depuis le plus longtemps
         let selectedUser = eligibleUsers[0];
-        let selectedHistory = histories.find(h => h.userId.toString() === selectedUser._id.toString());
-
         for (const user of eligibleUsers) {
-            const history = histories.find(h => h.userId.toString() === user._id.toString());
-            if (!selectedHistory.lastAssignedAt || 
-                (history.lastAssignedAt && history.lastAssignedAt < selectedHistory.lastAssignedAt)) {
+            if (!selectedUser.lastChallengeAssignedAt || 
+                (user.lastChallengeAssignedAt && 
+                 user.lastChallengeAssignedAt < selectedUser.lastChallengeAssignedAt)) {
                 selectedUser = user;
-                selectedHistory = history;
             }
         }
 
-        // Mettre à jour l'historique de l'utilisateur sélectionné
-        await ChallengeAssignmentHistory.findOneAndUpdate(
-            { userId: selectedUser._id },
-            {
-                $inc: { assignmentCount: 1 },
-                $set: { lastAssignedAt: new Date() }
+        // Mettre à jour l'utilisateur sélectionné
+        const newCycle = eligibleUsers.length === users.length ? maxCycle + 1 : maxCycle;
+        await User.findByIdAndUpdate(selectedUser._id, {
+            $set: {
+                lastChallengeAssignedAt: new Date(),
+                lastCycleChallengeDate: new Date(),
+                currentCycle: newCycle
             }
-        );
+        });
 
         // Mettre à jour le défi avec l'utilisateur assigné
         challenge.assignedTo = selectedUser._id;
